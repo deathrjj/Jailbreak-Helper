@@ -117,48 +117,11 @@ InstallIPA:
 	Gui, Submit
 	Gui, Destroy
 	
-	Run Files/Impactor.exe
+	Run Files/Impactor/Impactor.exe
 	
 	Sleep 1000 
+	SetWorkingDir, Files
 	Run explorer .
-	Sleep 1000
-	
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	
-	
-	Send {Down}
-	Send {Up}
-	Send {Enter}
-	
-	Sleep (200)
-	
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	Send {Tab}
-	
-	Send {Down}
-	Send {Down}
-	Send {Down}
-	Send {Down}
-	Send {Down}
-	Send {Down}
-	
-	Sleep 500
-	
-	PixelSearch, IPA_X, IPA_Y, 0, 0, A_ScreenWidth, A_ScreenHeight, 0xFFE8CC,,fast
-	mousemove, IPA_X, IPA_Y
 	
 	Up::
 		Send %ID%
