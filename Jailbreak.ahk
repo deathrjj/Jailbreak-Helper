@@ -1,18 +1,47 @@
-#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 
+Download:	
+
+	Gui Add, Text, x8 y2 w425 h16 +0x200, Downloading Yalu from         https://yalu.qwertyoruiop.com/yalu102_beta7.ipa
+	Gui Add, Text, x8 y19 w422 h18 +0x200, Downloading Impactor from  https://cydia.saurik.com/api/latest/2
+	Gui Show, w444 h45, Downloading
+
+	FileCreateDir, Files
+	UrlDownloadToFile, https://yalu.qwertyoruiop.com/yalu102_beta7.ipa, Files/yalu102_beta7.ipa
+	UrlDownloadToFile, https://cydia.saurik.com/api/latest/2, Files/Impactor.zip
+
+	Zip := A_ScriptDir . "\Files\Impactor.zip"
+	Unz := A_ScriptDir . "\Files\Impactor\"
+
+	fso := ComObjCreate("Scripting.FileSystemObject")
+	If Not fso.FolderExists(Unz)
+	   fso.CreateFolder(Unz)
+	psh  := ComObjCreate("Shell.Application")
+	zippedItems := psh.Namespace( Zip ).items().count
+	psh.Namespace( Unz ).CopyHere( psh.Namespace( Zip ).items, 4|16 )
+	Loop {
+		sleep 100
+		unzippedItems := psh.Namespace( Unz ).items().count
+		IfEqual,zippedItems,%unzippedItems%
+			break
+			}
+	FileDelete, Files/Impactor.zip
+	
+	Gui, Destroy
+	gosub Requirements
+	
 Requirements:
 	Gui, Destroy
 	Gui, Add, Text,, Yalu iOS 10 Jailbreak 
 	Gui, Add, Text,, 
 	Gui, Add, Text,, Requirements: 
-	Gui, Add, Text,, 1.iTunes installed on PC
-	Gui, Add, Text,, 2.64bit iOS device:
+	Gui, Add, Text,, 1.  iTunes installed on PC
+	Gui, Add, Text,, 2.  64bit iOS device:
 	Gui, Add, Text,,
-	Gui, Add, Text,, iPhone 7(+) : iOS 10.0.2 - 10.1.1
 	Gui, Add, Text,, iPhone 6s(+): iOS 10.0.2 - 10.2
 	Gui, Add, Text,, iPhone SE   : iOS 10.0.2 - 10.2
 	Gui, Add, Text,, iPhone 6(+) : iOS 10.0.2 - 10.2
@@ -40,6 +69,7 @@ Requirements:
 	Gui, Show, w600 h800 Center
 	Return
 
+
 About:
 	Gui, Destroy
 	Gui, Add, Text,,Jailbreaking gives you root access over your device, letting you customise and change almost everything about it.
@@ -55,7 +85,8 @@ About:
 	Gui, Add, Text,,
 	Gui, Add, Text,,Currently the jailbreak uses impactor which only allows an app to be signed for one week. 
 	Gui, Add, Text,,This means that after one week the Yalu app will no longer work. 
-	Gui, Add, Text,,If you reboot your device after this time you will not be able to run the Yalu app meaning you wont be able to go into jailbroken mode.
+	Gui, Add, Text,,If you reboot your device after this time you will not be able to run the Yalu app,
+	Gui, Add, Text,,meaning you wont be able to go into jailbroken mode.
 	Gui, Add, Text,,
 	Gui, Add, Text,,To resign the app just install the ipa again using this program.
 	Gui, Add, Text,,All your tweaks and settings will still be there after you reboot into jailbroken mode.
@@ -363,4 +394,13 @@ Compatible:
 	
 Exit:
 	Exitapp
-	Return	
+
+
+
+
+
+
+GuiEscape:
+	ExitApp
+GuiClose:
+	ExitApp 
